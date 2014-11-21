@@ -32,3 +32,11 @@ basepath = /path/to/myblog
 access_token = some-access-token-generated-by-dropbox-app
 ```
 
+Running
+-------
+The following will start pumping incremental data to your Jekyll directory.
+```bash
+cd lately.cc/listener
+nohup ./lately.py &
+```
+After Lately.cc has been started, you can run periodic Jekyll regeneration to update the blog. More proactive regeneration trigger will be implemented in the future.
