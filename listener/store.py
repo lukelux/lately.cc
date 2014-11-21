@@ -31,7 +31,9 @@ def main():
   config = ConfigParser.ConfigParser()
   config.read('config.ini')
 
-  dbpath = config.get('server', 'dbpath')
+  apppath = config.get('server', 'apppath')
+  dbpath = "%s/%s" % (apppath, config.get('server', 'dbpath'))
+
   access_token = config.get('dropbox', 'access_token')
   pollsec = config.getint('server', 'pollsec')
 
@@ -49,7 +51,7 @@ def main():
   jobqueue = Queue.Queue(2)
 
   dayone_listener = dayone.DayOneStore(access_token, cursor, jobqueue)
-  blog_writer = journal.JournalWriter('lately.cc', metadb)
+  blog_writer = journal.JournalWriter(apppath, metadb)
 
   log.info("Starting Lately Sync")
   dayone_listener.start()
