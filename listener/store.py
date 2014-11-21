@@ -16,6 +16,11 @@ import meta
 
 inshutdown = False
 
+def initdirs(dirlist):
+  for d in dirlist:
+    if not os.path.exists(d):
+      os.makedirs(d)
+
 def shutdown_handler(signum, frame):
   global inshutdown
   if signum == signal.SIGINT or signum == signal.SIGTERM:
@@ -27,31 +32,49 @@ def main():
   signal.signal(signal.SIGTERM, shutdown_handler)
   signal.signal(signal.SIGINT, shutdown_handler)
 
-
   config = ConfigParser.ConfigParser()
   config.read('config.ini')
 
-  apppath = config.get('server', 'apppath')
-  dbpath = "%s/%s" % (apppath, config.get('server', 'dbpath'))
+  basepath     = config.get    ( 'server' ,  'basepath'     )
+  dbname       = config.get    ( 'server' ,  'dbname'       )
+  pollsec      = config.getint ( 'server' ,  'pollsec'      )
+  qsize        = config.getint ( 'server' ,  'qsize'        )
+  access_token = config.get    ( 'dropbox',  'access_token' )
 
-  access_token = config.get('dropbox', 'access_token')
-  pollsec = config.getint('server', 'pollsec')
+  dbpath   = "%s/data/%s" % (basepath, dbname)
+  logpath  = "%s/log/lately.cc" % basepath
 
-  metadb = meta.MetaDb(dbpath)
+  basedirs = []
+  basedirs.append("%s/data"   % basepath)
+  basedirs.append("%s/log"    % basepath)
+  basedirs.append("%s/_posts" % basepath)
+  basedirs.append("%s/img"    % basepath)
 
-  logfile = config.get('server', 'logfile')
-  logging.basicConfig(filename=logfile, level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
+  # create base directories
+  initdirs(basedirs)
+
+  logging.basicConfig(
+    filename=logpath,
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s: %(message)s'
+  )
 
   log = logging.getLogger("main")
 
+  log.info("------------------")
+  log.info("Lately starting up")
+  log.info("------------------")
+
+  metadb = meta.MetaDb(dbpath)
   cursor = metadb.cursor()
+
   if not cursor is None:
     logging.info("Using persisted cursor = %s" % cursor)
 
-  jobqueue = Queue.Queue(2)
+  jobqueue = Queue.Queue(qsize)
 
   dayone_listener = dayone.DayOneStore(access_token, cursor, jobqueue)
-  blog_writer = journal.JournalWriter(apppath, metadb)
+  blog_writer = journal.JournalWriter(basepath, metadb)
 
   log.info("Starting Lately Sync")
   dayone_listener.start()

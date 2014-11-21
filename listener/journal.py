@@ -16,12 +16,6 @@ class JournalWriter:
     self.basepath = basepath
     self.metadb = metadb
 
-  def checkdirs(self):
-    if not os.path.exists('%s/img' % self.basepath):
-      os.makedirs('%s/img' % self.basepath)
-    if not os.path.exists('%s/_posts' % self.basepath):
-      os.makedirs('%s/_posts' % self.basepath)
-
   def getRevision(self, hashkey, meta):
     # first look for it in metadb
     revision = self.metadb.revision(hashkey)
@@ -37,8 +31,6 @@ class JournalWriter:
     return revision
 
   def write(self, entry):
-    self.checkdirs()
-
     name = entry['name']
     meta = entry['meta']
     fp   = entry['fp']

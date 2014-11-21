@@ -1,8 +1,9 @@
 [server]
-dbpath  = eungyu.meta
-logfile = lately.log
+dbname  = lately.meta
+basepath = /Users/someuser/lately.cc/app
 pollsec = 30
 qsize = 3
 
 [dropbox]
-access_token = pregenerated-dropbox-dev-accesstoken
+access_token = some-access-token-generated-by-dropbox
+
