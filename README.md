@@ -8,3 +8,10 @@ Lately.cc is a simple collection of Python scripts (for now) that actively liste
 
 Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to listen to change stream in efficient manner without overloading the Dropbox nodes. Changes are applied as they happen from the app (1-2 seconds). There are dozens of DayOne export scripts on Github, but they are intended to be used as one time CLI tool. Lately.cc aims to become a service which users can run over a long period of time -- as long as life time of blog itself.
 
+Installation
+------------
+Installation does not require running any scripts. Simply download the scripts
+```bash
+git clone git@github.com:eungyu/lately.cc.git
+```
+
