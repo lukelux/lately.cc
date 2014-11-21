@@ -6,5 +6,5 @@ Day One (http://dayoneapp.com) by Bloom Built is an OSX/iOS-centric journaling a
 
 Lately.cc is a simple collection of Python scripts (for now) that actively listens to change stream from Day One's Dropbox, and generate Jekyll blog on the fly. Photo images are stored in ```img```, and journal entries are stored as markdowns in ```_posts``` directory. Users get to choose which entries are published by choosing the entry to be *Starred*. A starred entry that is published can also be removed after the user *Unstars* the entry.
 
-Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to listens to change stream in efficient manner without overloading the Dropbox nodes. Changes are applied as they happen from the app (1-2 seconds). 
+Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to listen to change stream in efficient manner without overloading the Dropbox nodes. Changes are applied as they happen from the app (1-2 seconds). There are dozens of DayOne export scripts on Github, but they are intended to be used as one time CLI tool. Lately.cc aims to become a service which users can run over a long period of time -- as long as life time of blog itself.
 
