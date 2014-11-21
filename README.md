@@ -23,7 +23,7 @@ Copy over example config as ```config.ini```
 cd lately.cc/listener
 cp config.example config.ini
 ```
-Inside the ```config.ini``` file, provide at least these two config values. ```basepath``` is the absolute path where your Jekyll directory is setup, and ```access_token``` is the access_token generated from your dropbox app (yes, we do also require you to register a developer app from Dropbox Developer Console).
+Inside the ```config.ini``` file, provide at least these two config values. ```basepath``` is the absolute path where your Jekyll directory is setup, and ```access_token``` is the access_token generated from your dropbox app (yes, we do also require you to register a developer app from [Dropbox Developer Console](https://www.dropbox.com/developers/apps)).
 ```ini
 [server]
 basepath = /path/to/myblog
