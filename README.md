@@ -12,7 +12,11 @@ Installation
 ------------
 Lately.cc works with Jekyll. Install Jekyll first, and then clone this git repository.
 ```bash
+# prerequisites
 gem install jekyll
+pip install jinja2
+
+# simply clone this source
 git clone git@github.com:eungyu/lately.cc.git
 ```
 
