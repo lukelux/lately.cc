@@ -3,26 +3,27 @@
 import re
 import os
 import sys
+import shutil
+import subprocess
 from jinja2 import Template, Environment, FileSystemLoader
- 
-def setup_appdirs(userinput):
-  basepath = userinput['basepath']
-  if not os.path.exists(basepath) or not os.path.isdir(basepath):
-    print "\n%s does not seem to be a valid directory" % basepath
-    print "Exiting...\n"
-    sys.exit(1)
- 
-  print "[+] Checking to see if valid app directory exists"
 
-  required_dirs = [ '_posts', '_layouts' ]
-  for d in required_dirs:
-    if not os.path.exists("%s/%s" % (basepath,d)) or not os.path.isdir("%s/%s" % (basepath,d)):
-      print "\n%s does not seem to be a jekyll instance" % basepath
-      print "Please try creating with:"
-      print "\n  jekyll new %s\n" % basepath
-      sys.exit(1) 
-  
-  print "[+] Checking to see if app directory is Jekyll-enabled"
+def init_required(userinput):
+  basedir = userinput['basepath']
+  required = [
+    ('img',      'photo upload'),
+    ('_plugins', 'Jekyll plugins'),
+    ('data',     'lately metadata'),
+    ('log',      'logger')
+  ]
+  for required_dir in required:
+    fullpath = "%s/%s" % (basedir, required_dir[0])
+    if not os.path.exists(fullpath):
+      os.makedirs(fullpath)
+    print "[+] Generated %s directory %s" % (required_dir[1], required_dir[0])
+
+  file_exists_plugin_path = "%s/_plugins/%s" % (basedir, "file_exists.rb")
+  shutil.copyfile("contrib/file_exists.rb", file_exists_plugin_path)
+  print "[+] Copied file_exists Jekyll plugin"
 
 def generate_config(userinput):
   PATH = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +36,7 @@ def generate_config(userinput):
 
   f = open("listener/config.ini", "w")
   f.write(t.render(
-    access_token=userinput["access_token"], 
+    access_token=userinput["access_token"],
     basepath=userinput["basepath"]
   ))
   f.close()
@@ -54,8 +55,18 @@ def get_user_input(desc):
     if regex.match(token):
       return token
 
+    if 'default' in desc:
+      return desc['default']
+
   return None
 
+def get_jekyll_path():
+  path=os.getenv('PATH')
+  for p in path.split(os.path.pathsep):
+    filepath=os.path.join(p, 'jekyll')
+    if os.path.exists(filepath) and os.access(filepath, os.X_OK):
+      return filepath
+  return None
 
 def main():
   print "------------------------------------------------------------"
@@ -70,14 +81,23 @@ def main():
     {
       "key"   : "access_token",
       "param" : "Dropbox generated access token",
-      "regex" : "^[a-zA-z0-9]+$"
+      "regex" : "^[a-zA-z0-9\-]+$"
     },
     {
-      "key"   : "basepath",
-      "param" : "Absolute path to Jekyll source directory",
-      "regex" : "/(.+)$"
+      "key"     : "basepath",
+      "param"   : "path to Jekyll source directory [default: app]",
+      "regex"   : "(.+)",
+      "default" : "app"
     }
   ]
+
+  print ""
+  jekyllpath = get_jekyll_path()
+  if jekyllpath is None:
+    print "Jekyll is not found. Lately only works with Jekyll."
+    print "Please install by:\n"
+    print "  gem install jekyll\n"
+    sys.exit(1)
 
   userinput = {}
   for desc in inputs:
@@ -87,20 +107,18 @@ def main():
       sys.exit(1)
     userinput[desc['key']] = answer
 
-  print ""
-
   generate_config(userinput)
-  setup_appdirs(userinput)
 
-  if not os.path.exists("%s/img" % userinput['basepath']):
-    os.makedirs("%s/img" % userinput['basepath'])
-  print "[+] Generated photo upload directory %s/img" % userinput['basepath']
+  if not os.path.exists(userinput['basepath']):
+    print "[+] Setting up Jekyll app directory"
+    subprocess.call([ jekyllpath, 'new', userinput['basepath']])
+
+  init_required(userinput)
+
   print "\nSetup is complete!\n"
   print "start lately.cc by:"
   print "\n  cd listener"
-  print "  nohup ./lately.py &\n" 
+  print "  nohup ./lately.py &\n"
 
 if __name__ == "__main__":
   main()
-
-
