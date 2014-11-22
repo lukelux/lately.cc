@@ -1,9 +1,25 @@
+;
+; Lately.cc Configuration
+;
+
 [server]
+
+; name of database
 dbname   = lately.meta
+
+; basepath where jekyll directory has been installed
 basepath = {{ basepath }}
+
+; longpoll timeout to Dropbox API
 pollsec  = 30
+
+; queue size between producer and consumer 
+; this determines amount of memory in use
 qsize    = 3
 
 [dropbox]
+
+; generated access_token from Dropbox app
+; make an app from developer console and put it here
 access_token = {{ access_token }}
 
