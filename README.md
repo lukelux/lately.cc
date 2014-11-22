@@ -10,10 +10,10 @@ Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to
 
 Installation
 ------------
-Installation does not require running any scripts. Simply download the scripts. Lately.cc assumes that you already have a Jekyll directory setup somewhere.
+Lately.cc works with Jekyll. Install Jekyll first, and then clone this git repository.
 ```bash
+gem install jekyll
 git clone git@github.com:eungyu/lately.cc.git
-jekyll create myblog
 ```
 
 Configuration
