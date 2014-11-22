@@ -23,7 +23,7 @@ Run the setup script,
 cd lately.cc
 python setup.py
 ```
-The script will ask ```basepath``` which is the absolute path where your Jekyll directory is setup, and ```access_token``` generated from your dropbox app (yes, we do also require you to register a developer app from [Dropbox Developer Console](https://www.dropbox.com/developers/apps)).
+The script will ask ```basepath``` which is the path where your Jekyll directory is setup (simply press enter and it defaults to example app predefined), and ```access_token``` generated from your dropbox app (yes, we do also require you to register a developer app from [Dropbox Developer Console](https://www.dropbox.com/developers/apps)).
 
 The setup script will validate the Jekyll directory and also generate necessary config and data directories.
 
