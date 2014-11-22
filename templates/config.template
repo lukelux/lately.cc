@@ -1,0 +1,9 @@
+[server]
+dbname   = lately.meta
+basepath = {{ basepath }}
+pollsec  = 30
+qsize    = 3
+
+[dropbox]
+access_token = {{ access_token }}
+
