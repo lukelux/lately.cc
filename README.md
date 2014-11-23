@@ -17,12 +17,15 @@ unzip dropbox-python-sdk-2.2.0.zip
 cd dropbox-python-sdk-2.2.0 && sudo python setup.py install
 ```
 
-Lately.cc works with Jekyll. Install Jekyll first, and then clone this git repository.
+Lately.cc works with Jekyll and Jinja2
 ```bash
 # prerequisites
 gem install jekyll
 pip install jinja2
+```
 
+Finally clone lately source
+```bash
 # simply clone this source
 git clone git@github.com:eungyu/lately.cc.git
 ```
