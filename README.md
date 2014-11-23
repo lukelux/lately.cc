@@ -10,7 +10,7 @@ Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to
 
 Installation
 ------------
-First install Dropbox Python SDK
+First install [Dropbox Python SDK](https://www.dropbox.com/developers/core/sdks/python)
 ```bash
 curl -LO https://www.dropbox.com/developers/downloads/sdks/core/python/dropbox-python-sdk-2.2.0.zip
 unzip dropbox-python-sdk-2.2.0.zip
