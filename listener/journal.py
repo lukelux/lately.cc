@@ -62,10 +62,10 @@ class JournalWriter:
 
   def get_image_pull_syntax(self, revision):
     syntax = []
-    syntax.append("{%% capture imgfound %%}{%% file_exists img/%s.jpg %%}{%% endcapture %%}" % revision)
+    syntax.append("{%% capture imgfound %%}{%% file_exists img/p/%s.jpg %%}{%% endcapture %%}" % revision)
     syntax.append("{% if imgfound == \"true\" %}")
     syntax.append("<div class=\"fullimg\">")
-    syntax.append("  <img src=\"/img/%s.jpg\" alt=\"title photo\">" % revision)
+    syntax.append("  <img src=\"/img/p/%s.jpg\" alt=\"title photo\">" % revision)
     syntax.append("</div>")
     syntax.append("{% endif %}")
     return "\n".join(syntax)
