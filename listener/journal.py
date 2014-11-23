@@ -69,7 +69,7 @@ class JournalWriter:
       trim_blocks=False)
 
     t = TEMPLATE_ENVIRONMENT.get_template('img-check-syntax.template')
-    return t.render(revision=revision)
+    return t.render(basepath=self.basepath, revision=revision)
 
   def unpublish(self, fullpath):
     self.log.info("%s is no longer published, removing" % fullpath)

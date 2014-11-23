@@ -25,7 +25,7 @@ def init_required(userinput):
   shutil.copyfile("contrib/file_exists.rb", file_exists_plugin_path)
   print "[+] Copied file_exists Jekyll plugin"
 
-def generate_config(basepath, access_token):
+def generate_config(basepath, sitepath, access_token):
   PATH = os.path.dirname(os.path.abspath(__file__))
   TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
@@ -37,7 +37,8 @@ def generate_config(basepath, access_token):
   f = open("listener/config.ini", "w")
   f.write(t.render(
     access_token=access_token,
-    basepath=basepath
+    basepath=basepath,
+    sitepath=sitepath
   ))
   f.close()
 
@@ -68,6 +69,11 @@ def get_jekyll_path():
       return filepath
   return None
 
+def convert_to_abs(path):
+  if not os.path.isabs(path):
+    path = "%s/%s" % (os.path.dirname(os.path.abspath(__file__)), path)
+  return path
+
 def main():
   print "------------------------------------------------------------"
   print " _           _         _         ___       _                "
@@ -88,6 +94,11 @@ def main():
       "param"   : "path to Jekyll source directory [default: app]",
       "regex"   : "(.+)",
       "default" : "app"
+    },
+    {
+      "key"   : "sitepath",
+      "param" : "path to webapp site directory",
+      "regex" : "(.+)"
     }
   ]
 
@@ -107,12 +118,11 @@ def main():
       sys.exit(1)
     userinput[desc['key']] = answer
 
-  basepath = userinput['basepath']
   access_token = userinput['access_token']
-  if not os.path.isabs(basepath):
-    basepath = "%s/%s" % (os.path.dirname(os.path.abspath(__file__)), basepath)
- 
-  generate_config(basepath, access_token)
+  basepath     = convert_to_abs(userinput['basepath'])
+  sitepath     = convert_to_abs(userinput['sitepath'])
+
+  generate_config(basepath, sitepath, access_token)
 
   if not os.path.exists(userinput['basepath']):
     print "[+] Setting up Jekyll app directory"

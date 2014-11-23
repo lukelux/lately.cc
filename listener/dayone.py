@@ -80,9 +80,12 @@ class DayOneStore:
       self.cursor = result['cursor']
       hasmore = result['has_more']
 
+      lastrevision = 0
       for entry in result['entries']:
         filename = entry[0]
         meta = entry[1]
+
+        lastrevision = meta['revision']
 
         # skip any dir level notification
         if meta['is_dir']:
@@ -94,10 +97,12 @@ class DayOneStore:
           'entry' : entry
         })
 
-      results.append({
-        'type' : 'cursor',
-        'pos'  : self.cursor
-      })
+      if lastrevision > 0:
+        results.append({
+          'type'     : 'cursor',
+          'pos'      : self.cursor,
+          'revision' : lastrevision
+        })
 
     if not results:
       return None

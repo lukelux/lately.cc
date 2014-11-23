@@ -10,10 +10,15 @@ dbname   = lately.meta
 ; basepath where jekyll directory has been installed
 basepath = {{ basepath }}
 
+; sitepath where webapp is being served
+; i.e. sitepath/current --> sitepath/releases/200 symlink
+; will be generated for each release
+sitepath = {{ sitepath }}
+
 ; longpoll timeout to Dropbox API
 pollsec  = 30
 
-; queue size between producer and consumer 
+; queue size between producer and consumer
 ; this determines amount of memory in use
 qsize    = 3
 
@@ -22,4 +27,3 @@ qsize    = 3
 ; generated access_token from Dropbox app
 ; make an app from developer console and put it here
 access_token = {{ access_token }}
-

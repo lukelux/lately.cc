@@ -6,6 +6,7 @@ import shelve
 import logging
 import signal, os
 import threading
+import subprocess
 
 import ConfigParser
 import Queue
@@ -36,22 +37,26 @@ def main():
   config.read('config.ini')
 
   basepath     = config.get    ( 'server' ,  'basepath'     )
+  sitepath     = config.get    ( 'server' ,  'sitepath'     )
   dbname       = config.get    ( 'server' ,  'dbname'       )
   pollsec      = config.getint ( 'server' ,  'pollsec'      )
   qsize        = config.getint ( 'server' ,  'qsize'        )
   access_token = config.get    ( 'dropbox',  'access_token' )
 
-  dbpath   = "%s/data/%s" % (basepath, dbname)
-  logpath  = "%s/log/lately.cc" % basepath
+  dbpath        = "%s/data/%s" % (basepath, dbname)
+  logpath       = "%s/log/lately.cc" % basepath
+  sitelink      = "%s/current"  % sitepath
+  releasedir    = "%s/releases" % sitepath
 
   basedirs = []
 
   # this is done from setup.py
   # but do this as precaution
-  basedirs.append("%s/data"   % basepath)
-  basedirs.append("%s/log"    % basepath)
-  basedirs.append("%s/_posts" % basepath)
-  basedirs.append("%s/img/p"  % basepath)
+  basedirs.append("%s/data"     % basepath)
+  basedirs.append("%s/log"      % basepath)
+  basedirs.append("%s/_posts"   % basepath)
+  basedirs.append("%s/img/p"    % basepath)
+  basedirs.append("%s/releases" % sitepath)
 
   # create base directories
   initdirs(basedirs)
@@ -91,7 +96,23 @@ def main():
         metadb.commit(desc['pos'])
         log.debug("Persisted cursor pos=%s" % desc['pos'])
 
+        destdir   = '%s/%s' % (releasedir, desc['revision'])
+
         # now is the chance to regenerate static pages
+        subprocess.call([
+          '/usr/bin/jekyll',
+          'build',
+          '--source',
+          basepath,
+          '--destination',
+          destdir
+        ])
+
+        # point to newly built directory
+        if os.path.exists(sitelink):
+          os.unlink(sitelink)
+
+        os.symlink(destdir, sitelink)
 
       else:
         # do journal write here
