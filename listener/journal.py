@@ -4,6 +4,7 @@ import os
 import logging
 import dropbox
 import plistlib
+from jinja2 import Template, Environment, FileSystemLoader
 
 class JournalWriter:
   """
@@ -61,14 +62,14 @@ class JournalWriter:
     return "\n".join(headeritems)
 
   def get_image_pull_syntax(self, revision):
-    syntax = []
-    syntax.append("{%% capture imgfound %%}{%% file_exists img/p/%s.jpg %%}{%% endcapture %%}" % revision)
-    syntax.append("{% if imgfound == \"true\" %}")
-    syntax.append("<div class=\"fullimg\">")
-    syntax.append("  <img src=\"/img/p/%s.jpg\" alt=\"title photo\">" % revision)
-    syntax.append("</div>")
-    syntax.append("{% endif %}")
-    return "\n".join(syntax)
+    PATH = os.path.dirname(os.path.abspath(__file__))
+    TEMPLATE_ENVIRONMENT = Environment(
+      autoescape=False,
+      loader=FileSystemLoader(os.path.join(PATH, '../templates')),
+      trim_blocks=False)
+
+    t = TEMPLATE_ENVIRONMENT.get_template('img-check-syntax.template')
+    return t.render(revision=revision)
 
   def unpublish(self, fullpath):
     self.log.info("%s is no longer published, removing" % fullpath)
