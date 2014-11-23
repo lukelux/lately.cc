@@ -10,7 +10,7 @@ Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to
 
 Installation
 ------------
-First install [Dropbox Python SDK](https://www.dropbox.com/developers/core/sdks/python)
+Download and install [Dropbox Python SDK](https://www.dropbox.com/developers/core/sdks/python)
 ```bash
 # download, unzip, and install
 curl -LO https://www.dropbox.com/developers/downloads/sdks/core/python/dropbox-python-sdk-2.2.0.zip
@@ -38,7 +38,7 @@ Run the setup script,
 cd lately.cc
 python setup.py
 ```
-The script will ask ```basepath``` which is the path where your Jekyll directory is setup (simply press enter and it defaults to example app predefined), and ```access_token``` generated from your dropbox app (yes, we do also require you to register a developer app from [Dropbox Developer Console](https://www.dropbox.com/developers/apps)).
+The script will run through a dialogue and ask a few questions. The ```basepath``` is the path where your Jekyll directory is setup (simply press enter and it defaults to example app predefined), and ```access_token``` is the token generated from your dropbox app (yes, we do also require you to register a developer app from [Dropbox Developer Console](https://www.dropbox.com/developers/apps)).
 
 The setup script will validate the Jekyll directory and also generate necessary config and data directories.
 
@@ -47,6 +47,6 @@ Running
 The following will start pumping incremental data to your Jekyll directory.
 ```bash
 cd lately.cc/listener
-nohup ./lately.py &
+nohup ./lately.py > /dev/null 2>&1 &
 ```
 After Lately.cc has been started, you can run periodic Jekyll regeneration to update the blog. More proactive regeneration trigger will be implemented in the future.
