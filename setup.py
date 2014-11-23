@@ -10,7 +10,7 @@ from jinja2 import Template, Environment, FileSystemLoader
 def init_required(userinput):
   basedir = userinput['basepath']
   required = [
-    ('img',      'photo upload'),
+    ('img/p',      'photo upload'),
     ('_plugins', 'Jekyll plugins'),
     ('data',     'lately metadata'),
     ('log',      'logger')

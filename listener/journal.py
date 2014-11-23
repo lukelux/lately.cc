@@ -47,7 +47,7 @@ class JournalWriter:
     return True
 
   def store_photo(self, fp, revision, extension):
-    fullpath = '%s/img/%s%s' % (self.basepath, revision, extension)
+    fullpath = '%s/img/p/%s%s' % (self.basepath, revision, extension)
     out = open(fullpath, 'wb')
     out.write(fp.read())
     out.close()

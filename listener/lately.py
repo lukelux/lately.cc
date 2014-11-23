@@ -45,10 +45,13 @@ def main():
   logpath  = "%s/log/lately.cc" % basepath
 
   basedirs = []
+
+  # this is done from setup.py
+  # but do this as precaution
   basedirs.append("%s/data"   % basepath)
   basedirs.append("%s/log"    % basepath)
   basedirs.append("%s/_posts" % basepath)
-  basedirs.append("%s/img"    % basepath)
+  basedirs.append("%s/img/p"  % basepath)
 
   # create base directories
   initdirs(basedirs)
