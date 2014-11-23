@@ -18,7 +18,7 @@ unzip dropbox-python-sdk-2.2.0.zip
 cd dropbox-python-sdk-2.2.0 && sudo python setup.py install
 ```
 
-Lately.cc works with Jekyll and Jinja2
+Lately.cc works with [Jekyll](http://jekyllrb.com/) and [Jinja2](http://jinja.pocoo.org/docs/dev/)
 ```bash
 # prerequisites
 gem install jekyll
