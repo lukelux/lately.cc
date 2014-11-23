@@ -12,6 +12,7 @@ Installation
 ------------
 First install [Dropbox Python SDK](https://www.dropbox.com/developers/core/sdks/python)
 ```bash
+# download, unzip, and install
 curl -LO https://www.dropbox.com/developers/downloads/sdks/core/python/dropbox-python-sdk-2.2.0.zip
 unzip dropbox-python-sdk-2.2.0.zip
 cd dropbox-python-sdk-2.2.0 && sudo python setup.py install
