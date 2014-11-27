@@ -27,6 +27,25 @@ def shutdown_handler(signum, frame):
   if signum == signal.SIGINT or signum == signal.SIGTERM:
     inshutdown = True
 
+def release(basepath, destdir, sitelink, log):
+  log.info('Releasing new version to %s' % destdir)
+
+  # now is the chance to regenerate static pages
+  subprocess.call([
+    '/usr/bin/jekyll',
+    'build',
+    '--source',
+    basepath,
+    '--destination',
+    destdir
+  ])
+
+  # point to newly built directory
+  if os.path.exists(sitelink):
+    os.unlink(sitelink)
+
+  os.symlink(destdir, sitelink)
+
 def main():
   global inshutdown
 
@@ -94,25 +113,14 @@ def main():
       if desc['type'] == 'cursor':
         # this is a cursor entry, persist to position disk
         metadb.commit(desc['pos'])
-        log.debug("Persisted cursor pos=%s" % desc['pos'])
+        log.info("Persisted cursor at pos=%s" % desc['pos'])
 
-        destdir   = '%s/%s' % (releasedir, desc['revision'])
+        if 'revision' in desc:
+          destdir = '%s/%s' % (releasedir, desc['revision'])
+          release(basepath, destdir, sitelink, log)
 
-        # now is the chance to regenerate static pages
-        subprocess.call([
-          '/usr/bin/jekyll',
-          'build',
-          '--source',
-          basepath,
-          '--destination',
-          destdir
-        ])
-
-        # point to newly built directory
-        if os.path.exists(sitelink):
-          os.unlink(sitelink)
-
-        os.symlink(destdir, sitelink)
+      elif desc['type'] == 'remove':
+        blog_writer.remove(desc)
 
       else:
         # do journal write here

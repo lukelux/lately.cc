@@ -81,15 +81,25 @@ class DayOneStore:
       hasmore = result['has_more']
 
       lastrevision = 0
+      syncrequired = False
+
       for entry in result['entries']:
         filename = entry[0]
         meta = entry[1]
 
-        lastrevision = meta['revision']
+        if meta is None:
+          results.append({
+              'type' : 'remove',
+              'name': filename
+            })
+          syncrequired = True
+          continue
 
         # skip any dir level notification
         if meta['is_dir']:
           continue
+
+        lastrevision = meta['revision']
 
         self.log.debug('Appending %s to change list' % filename)
         results.append({
@@ -97,12 +107,16 @@ class DayOneStore:
           'entry' : entry
         })
 
-      if lastrevision > 0:
-        results.append({
+      if syncrequired or lastrevision > 0:
+        cursormark = {
           'type'     : 'cursor',
           'pos'      : self.cursor,
-          'revision' : lastrevision
-        })
+        }
+
+        if lastrevision > 0:
+          cursormark['revision'] = lastrevision
+
+        results.append(cursormark)
 
     if not results:
       return None
@@ -114,7 +128,7 @@ class DayOneStore:
     if desc is None:
       return None
 
-    if desc['type'] == 'cursor':
+    if desc['type'] == 'cursor' or desc['type'] == 'remove':
       return desc
 
     entry = desc['entry']

@@ -17,41 +17,83 @@ class JournalWriter:
     self.basepath = basepath
     self.metadb = metadb
 
-  def getRevision(self, hashkey, meta):
-    # first look for it in metadb
-    revision = self.metadb.revision(hashkey)
-    if revision is None:
-      # must be first record with this hashkey
-      # resort to current revision in meta info
-      revision = meta['revision']
+  def remove(self, entry):
+    filename = entry['name']
+    hashkey    = os.path.splitext(os.path.basename(filename))[0]
+    extension  = os.path.splitext(os.path.basename(filename))[1]
+    
+    # now remove whatever is present
+    d = self.metadb.describe(hashkey)
+    if d is None:
+      return
 
-      # all subsequent changes to this hashkey
-      # will be identified by this revision
-      self.metadb.register(hashkey, revision)
+    if 'imgpath' in d and os.path.exists(d['imgpath']):
+      os.remove(d['imgpath'])
+      self.log.info('Removed image file - %s' % d['imgpath'])
 
-    return revision
+    if 'entrypath' in d and os.path.exists(d['entrypath']):
+      os.remove(d['entrypath'])
+      self.log.info('Removed entry file - %s' % d['entrypath'])
+
+    # remove items from metadb
+    self.metadb.deregister(hashkey)
+
+  def resolve_fullpath(self, name, meta, pfile=None):
+    fileparts = os.path.splitext(os.path.basename(name))
+
+    hashkey   = fileparts[0]
+    extension = fileparts[1]
+
+    mime      = meta['mime_type']
+
+    d = self.metadb.describe(hashkey)
+    if d is None:
+      d = { 'revision' : meta['revision'] }
+
+    revision = d['revision']
+    if mime.startswith('image'):
+      if 'imgpath' in d:
+        return (revision, d['imgpath'])
+
+      newpath = "%s/img/p/%s%s" % (self.basepath, revision, extension)
+      d['imgpath'] = newpath
+      self.metadb.register(hashkey, d)
+      return (revision, newpath)
+
+    if 'entrypath' in d:
+      return (revision, d['entrypath'])
+
+    if pfile is None:
+      return None
+
+    created = pfile['Creation Date']
+    newpath = "%s/_posts/%s-%s.markdown" % (self.basepath, created.strftime("%Y-%m-%d"), revision)
+
+    d['entrypath'] = newpath
+    self.metadb.register(hashkey, d)
+
+    return (revision, newpath)
 
   def write(self, entry):
     name = entry['name']
     meta = entry['meta']
     fp   = entry['fp']
 
-    hashkey   = os.path.splitext(os.path.basename(name))[0]
-    extension = os.path.splitext(os.path.basename(name))[1]
-    revision  = self.getRevision(hashkey, meta)
+    mime = meta['mime_type']
+    payload = fp.read()
 
-    if meta['mime_type'].startswith('image'):
-      self.store_photo(fp, revision, extension)
-    else:
-      self.store_entry(fp, revision)
+    revision = 0
+    if mime.startswith('image'):
+      (revision, fullpath) = self.resolve_fullpath(name, meta)
+      self.persist(fullpath, payload)
+      return True
 
+    pfile    = plistlib.readPlistFromString(payload)
+    (revision, fullpath) = self.resolve_fullpath(name, meta, pfile)
+    self.store_entry(fullpath, revision, pfile)
+
+    # TODO, do exception handling
     return True
-
-  def store_photo(self, fp, revision, extension):
-    fullpath = '%s/img/p/%s%s' % (self.basepath, revision, extension)
-    out = open(fullpath, 'wb')
-    out.write(fp.read())
-    out.close()
 
   def get_header(self, frontmatter):
     headeritems = []
@@ -72,16 +114,12 @@ class JournalWriter:
     return t.render(basepath=self.basepath, revision=revision)
 
   def unpublish(self, fullpath):
-    self.log.info("%s is no longer published, removing" % fullpath)
-    if os.path.isfile(fullpath):
+    if os.path.exists(fullpath) and os.path.isfile(fullpath):
+      self.log.info("%s is no longer published, removing" % fullpath)
       os.remove(fullpath)
 
-  def store_entry(self, fp, revision):
-    pfile = plistlib.readPlist(fp)
+  def store_entry(self, fullpath, revision, pfile):
     published = pfile['Starred']
-    created = pfile['Creation Date']
-
-    fullpath = '%s/_posts/%s-%s.markdown' % (self.basepath, created.strftime("%Y-%m-%d"), revision)
 
     if not published:
       self.unpublish(fullpath)
@@ -89,20 +127,21 @@ class JournalWriter:
 
     entrytext = pfile['Entry Text'].encode('utf8').split("\n",1)
 
-    content = entrytext[1]
+    content = "%s\n" % entrytext[1]
     title   = entrytext[0]
 
     frontmatter = {}
     frontmatter['layout'] = 'post'
     frontmatter['title'] = title
 
-    header = self.get_header(frontmatter)
-    syntax = self.get_image_pull_syntax(revision)
+    header = "%s\n" % self.get_header(frontmatter)
+    syntax = "%s\n" % self.get_image_pull_syntax(revision)
 
-    out = open(fullpath, 'wb')
-    out.write("%s\n" % header)
-    out.write("%s\n" % syntax)
-    out.write("%s\n" % content)
-    out.close()
-
+    self.persist(fullpath, [header, syntax, content])
     self.log.info("Processed changes to %s" % title)
+
+  def persist(self, filename, parts):
+    out = open(filename, 'wb')
+    for part in parts:
+      out.write(part)
+    out.close()

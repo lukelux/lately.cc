@@ -27,11 +27,16 @@ class MetaDb:
     self.db['cursor'] = cursor
     self.db.sync()
 
-  def register(self, hashkey, revision):
-    self.db[hashkey] = revision
+  def register(self, hashkey, desc):
+    self.db[hashkey] = desc
     self.db.sync()
 
-  def revision(self, hashkey):
+  def deregister(self, hashkey):
+    if self.db.has_key(hashkey):
+      del self.db[hashkey]
+      self.db.sync()
+      
+  def describe(self, hashkey):
     if self.db.has_key(hashkey):
       return self.db[hashkey]
     return None
