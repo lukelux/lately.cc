@@ -27,12 +27,12 @@ def shutdown_handler(signum, frame):
   if signum == signal.SIGINT or signum == signal.SIGTERM:
     inshutdown = True
 
-def release(basepath, destdir, sitelink, log):
+def release(basepath, destdir, sitelink, jekyllpath, log):
   log.info('Releasing new version to %s' % destdir)
 
   # now is the chance to regenerate static pages
   subprocess.call([
-    '/usr/bin/jekyll',
+    jekyllpath,
     'build',
     '--source',
     basepath,
@@ -57,6 +57,7 @@ def main():
 
   basepath     = config.get    ( 'server' ,  'basepath'     )
   sitepath     = config.get    ( 'server' ,  'sitepath'     )
+  jekyllpath   = config.get    ( 'server' ,  'jekyllpath'   )
   dbname       = config.get    ( 'server' ,  'dbname'       )
   pollsec      = config.getint ( 'server' ,  'pollsec'      )
   qsize        = config.getint ( 'server' ,  'qsize'        )
@@ -117,7 +118,7 @@ def main():
 
         if 'revision' in desc:
           destdir = '%s/%s' % (releasedir, desc['revision'])
-          release(basepath, destdir, sitelink, log)
+          release(basepath, destdir, sitelink, jekyllpath, log)
 
       elif desc['type'] == 'remove':
         blog_writer.remove(desc)

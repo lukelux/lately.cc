@@ -22,6 +22,9 @@ pollsec  = 30
 ; this determines amount of memory in use
 qsize    = 3
 
+; location of jekyll binary
+jekyllpath = {{ jekyllpath }}
+
 [dropbox]
 
 ; generated access_token from Dropbox app

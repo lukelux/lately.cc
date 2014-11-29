@@ -25,7 +25,7 @@ def init_required(userinput):
   shutil.copyfile("contrib/file_exists.rb", file_exists_plugin_path)
   print "[+] Copied file_exists Jekyll plugin"
 
-def generate_config(basepath, sitepath, access_token):
+def generate_config(basepath, sitepath, access_token, jekyllpath):
   PATH = os.path.dirname(os.path.abspath(__file__))
   TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
@@ -38,7 +38,8 @@ def generate_config(basepath, sitepath, access_token):
   f.write(t.render(
     access_token=access_token,
     basepath=basepath,
-    sitepath=sitepath
+    sitepath=sitepath,
+    jekyllpath=jekyllpath
   ))
   f.close()
 
@@ -122,7 +123,7 @@ def main():
   basepath     = convert_to_abs(userinput['basepath'])
   sitepath     = convert_to_abs(userinput['sitepath'])
 
-  generate_config(basepath, sitepath, access_token)
+  generate_config(basepath, sitepath, access_token, jekyllpath)
 
   if not os.path.exists(userinput['basepath']):
     print "[+] Setting up Jekyll app directory"
