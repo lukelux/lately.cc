@@ -28,15 +28,18 @@ class MetaDb:
     self.db.sync()
 
   def register(self, hashkey, desc):
-    self.db[hashkey] = desc
+    k = hashkey.encode('utf-8')
+    self.db[k] = desc
     self.db.sync()
 
   def deregister(self, hashkey):
-    if self.db.has_key(hashkey):
-      del self.db[hashkey]
+    k = hashkey.encode('utf-8')
+    if self.db.has_key(k):
+      del self.db[k]
       self.db.sync()
       
   def describe(self, hashkey):
-    if self.db.has_key(hashkey):
-      return self.db[hashkey]
+    k = hashkey.encode('utf-8')
+    if self.db.has_key(k):
+      return self.db[k]
     return None
