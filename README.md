@@ -25,7 +25,7 @@ gem install jekyll
 pip install jinja2
 ```
 
-Finally clone lately source
+Finally clone Lately source
 ```bash
 # simply clone this source
 git clone git@github.com:eungyu/lately.cc.git
