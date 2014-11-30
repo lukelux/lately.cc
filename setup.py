@@ -100,11 +100,6 @@ def main():
       "key"   : "sitepath",
       "param" : "path to webapp site directory",
       "regex" : "(.+)"
-    },
-    {
-      "key"   : "prefixurl",
-      "param" : "prefix url (e.g. /john)",
-      "regex" : "(.+)"
     }
   ]
 
