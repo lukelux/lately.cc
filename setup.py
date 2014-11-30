@@ -25,7 +25,7 @@ def init_required(userinput):
   shutil.copyfile("contrib/file_exists.rb", file_exists_plugin_path)
   print "[+] Copied file_exists Jekyll plugin"
 
-def generate_config(basepath, sitepath, access_token, jekyllpath):
+def generate_config(basepath, sitepath, access_token, jekyllpath, prefixurl):
   PATH = os.path.dirname(os.path.abspath(__file__))
   TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
@@ -39,7 +39,8 @@ def generate_config(basepath, sitepath, access_token, jekyllpath):
     access_token=access_token,
     basepath=basepath,
     sitepath=sitepath,
-    jekyllpath=jekyllpath
+    jekyllpath=jekyllpath,
+    prefixurl=prefixurl
   ))
   f.close()
 
@@ -100,6 +101,11 @@ def main():
       "key"   : "sitepath",
       "param" : "path to webapp site directory",
       "regex" : "(.+)"
+    },
+    {
+      "key"   : "prefixurl",
+      "param" : "prefix url (e.g. /john)",
+      "regex" : "(.+)"
     }
   ]
 
@@ -122,8 +128,9 @@ def main():
   access_token = userinput['access_token']
   basepath     = convert_to_abs(userinput['basepath'])
   sitepath     = convert_to_abs(userinput['sitepath'])
+  prefixurl    = userinput['prefixurl']
 
-  generate_config(basepath, sitepath, access_token, jekyllpath)
+  generate_config(basepath, sitepath, access_token, jekyllpath, prefixurl)
 
   if not os.path.exists(userinput['basepath']):
     print "[+] Setting up Jekyll app directory"

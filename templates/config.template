@@ -25,6 +25,9 @@ qsize    = 3
 ; location of jekyll binary
 jekyllpath = {{ jekyllpath }}
 
+; url part to be added
+prefixurl = {{ prefixurl }}
+
 [dropbox]
 
 ; generated access_token from Dropbox app
