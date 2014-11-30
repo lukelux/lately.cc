@@ -25,6 +25,8 @@ qsize    = 3
 ; location of jekyll binary
 jekyllpath = {{ jekyllpath }}
 
+; optional prefix url
+; prefixurl = 
 
 [dropbox]
 

@@ -58,6 +58,7 @@ def main():
   basepath     = config.get    ( 'server' ,  'basepath'     )
   sitepath     = config.get    ( 'server' ,  'sitepath'     )
   jekyllpath   = config.get    ( 'server' ,  'jekyllpath'   )
+  prefixurl    = config.get    ( 'server' ,  'prefixurl'    )
   dbname       = config.get    ( 'server' ,  'dbname'       )
   pollsec      = config.getint ( 'server' ,  'pollsec'      )
   qsize        = config.getint ( 'server' ,  'qsize'        )
@@ -65,7 +66,7 @@ def main():
 
   dbpath        = "%s/data/%s" % (basepath, dbname)
   logpath       = "%s/log/lately.cc" % basepath
-  sitelink      = "%s/eungyu"  % sitepath
+  sitelink      = "%s%s"  % (sitepath, prefixurl)
   releasedir    = "%s/releases" % sitepath
 
   basedirs = []
@@ -102,7 +103,7 @@ def main():
   jobqueue = Queue.Queue(qsize)
 
   dayone_listener = dayone.DayOneStore(access_token, cursor, jobqueue)
-  blog_writer = journal.JournalWriter(basepath, metadb)
+  blog_writer = journal.JournalWriter(basepath, prefixurl, metadb)
 
   log.info("Starting Lately Sync")
   dayone_listener.start()

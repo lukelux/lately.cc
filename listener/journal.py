@@ -13,8 +13,9 @@ class JournalWriter:
   log = logging.getLogger(__name__)
   yamldivide = "---"
 
-  def __init__(self, basepath, metadb):
+  def __init__(self, basepath, prefixurl, metadb):
     self.basepath = basepath
+    self.prefixurl = prefixurl
     self.metadb = metadb
 
   def remove(self, entry):
@@ -111,7 +112,7 @@ class JournalWriter:
       trim_blocks=False)
 
     t = TEMPLATE_ENVIRONMENT.get_template('img-check-syntax.template')
-    return t.render(basepath=self.basepath, revision=revision)
+    return t.render(basepath=self.basepath, prefixurl=self.prefixurl, revision=revision)
 
   def unpublish(self, fullpath):
     if os.path.exists(fullpath) and os.path.isfile(fullpath):

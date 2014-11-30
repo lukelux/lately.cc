@@ -1,6 +1,6 @@
 {{ "{%" }} capture imgfound {{ "%}"}}{{ "{%" }} file_exists {{ basepath }}/img/p/{{ revision }}.jpg {{ "%}"}}{{ "{%" }} endcapture {{ "%}"}}
 {{ "{%" }} if imgfound == "true" {{ "%}"}}
 <div class="fullimg">
-  <img src="/img/p/{{ revision }}.jpg" alt="title photo">
+  <img src="{{ prefixurl }}/img/p/{{ revision }}.jpg" alt="title photo">
 </div>
 {{ "{%" }} endif {{ "%}"}}
