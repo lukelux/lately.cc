@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="post">
-{% for post in site.posts limit:500 %}
+{% for post in site.posts limit:8 %}
   <div class="meta">
     <h2>{{ post.title }}</h2>
     {{ post.date | date: "%A, %B %-d, %Y" }}
