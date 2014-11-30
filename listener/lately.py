@@ -65,7 +65,7 @@ def main():
 
   dbpath        = "%s/data/%s" % (basepath, dbname)
   logpath       = "%s/log/lately.cc" % basepath
-  sitelink      = "%s/current"  % sitepath
+  sitelink      = "%s/eungyu"  % sitepath
   releasedir    = "%s/releases" % sitepath
 
   basedirs = []
