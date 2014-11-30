@@ -27,7 +27,7 @@ def shutdown_handler(signum, frame):
   if signum == signal.SIGINT or signum == signal.SIGTERM:
     inshutdown = True
 
-def release(basepath, destdir, sitelink, jekyllpath, prefixurl, log):
+def release(basepath, destdir, sitelink, jekyllpath, log):
   log.info('Releasing new version to %s' % destdir)
 
   # now is the chance to regenerate static pages
@@ -37,9 +37,7 @@ def release(basepath, destdir, sitelink, jekyllpath, prefixurl, log):
     '--source',
     basepath,
     '--destination',
-    destdir,
-    '--baseurl',
-    prefixurl
+    destdir
   ])
 
   # point to newly built directory
@@ -63,7 +61,6 @@ def main():
   dbname       = config.get    ( 'server' ,  'dbname'       )
   pollsec      = config.getint ( 'server' ,  'pollsec'      )
   qsize        = config.getint ( 'server' ,  'qsize'        )
-  prefixurl    = config.get    ( 'server' ,  'prefixurl'    )
   access_token = config.get    ( 'dropbox',  'access_token' )
 
   dbpath        = "%s/data/%s" % (basepath, dbname)
@@ -121,7 +118,7 @@ def main():
 
         if 'revision' in desc:
           destdir = '%s/%s' % (releasedir, desc['revision'])
-          release(basepath, destdir, sitelink, jekyllpath, prefixurl, log)
+          release(basepath, destdir, sitelink, jekyllpath, log)
 
       elif desc['type'] == 'remove':
         blog_writer.remove(desc)
