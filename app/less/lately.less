@@ -88,7 +88,13 @@ body {
 }
 
 .post {
-  .box-middle(@content-width);
+  .content p {
+    .box-middle(@content-width);
+  }
+
+  ul {
+    .box-middle((@content-width - 40))
+  }
 
   blockquote {
     font-style: italic;
@@ -106,4 +112,36 @@ body {
   }
 
   margin-bottom: @room-super;
+}
+
+// iphone
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 736px)
+{
+  .post {
+    font-weight: @weight-normal;
+    .content p, .meta {
+      .box-middle(90%);
+    }
+  }
+
+  ul {
+    .box-middle(80%);
+  }
+
+  .fullimg {
+    .box-middle(100%);
+    img {
+    max-width:100%;
+    }
+  }
+}
+
+// ipad
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+{
+
 }
