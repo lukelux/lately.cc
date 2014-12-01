@@ -112,21 +112,10 @@ def main():
     try:
       desc = jobqueue.get(block=True, timeout=5)
 
-      if desc['type'] == 'cursor':
-        # this is a cursor entry, persist to position disk
-        metadb.commit(desc['pos'])
-        log.info("Persisted cursor at pos=%s" % desc['pos'])
-
-        if 'revision' in desc:
-          destdir = '%s/%s' % (releasedir, desc['revision'])
-          release(basepath, destdir, sitelink, jekyllpath, log)
-
-      elif desc['type'] == 'remove':
-        blog_writer.remove(desc)
-
-      else:
-        # do journal write here
-        blog_writer.write(desc)
+      if blog_writer.process(desc):
+        # obtain last revision number and make a release
+        destdir = '%s/%s' % (releasedir, blog_writer.revision())
+        release(basepath, destdir, sitelink, jekyllpath, log)
 
     except Queue.Empty:
       log.debug('Queue is empty, retrying')

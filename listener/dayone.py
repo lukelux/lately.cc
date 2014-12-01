@@ -77,11 +77,9 @@ class DayOneStore:
 
     while hasmore:
       result = self.dropbox_client.delta(self.cursor, self.dayone_root)
+            
       self.cursor = result['cursor']
       hasmore = result['has_more']
-
-      lastrevision = 0
-      syncrequired = False
 
       for entry in result['entries']:
         filename = entry[0]
@@ -92,14 +90,11 @@ class DayOneStore:
               'type' : 'remove',
               'name': filename
             })
-          syncrequired = True
           continue
 
         # skip any dir level notification
         if meta['is_dir']:
           continue
-
-        lastrevision = meta['revision']
 
         self.log.debug('Appending %s to change list' % filename)
         results.append({
@@ -107,16 +102,11 @@ class DayOneStore:
           'entry' : entry
         })
 
-      if syncrequired or lastrevision > 0:
-        cursormark = {
-          'type'     : 'cursor',
-          'pos'      : self.cursor,
-        }
-
-        if lastrevision > 0:
-          cursormark['revision'] = lastrevision
-
-        results.append(cursormark)
+      # indicate cursor advancement
+      results.append({
+        'type'     : 'cursor',
+        'pos'      : self.cursor,
+      })
 
     if not results:
       return None
