@@ -1,8 +1,7 @@
 title: Lately.cc
 url: "http://lately.cc"
 description: "lately.cc eungyu"
-baseurl: /eungyu
 
 # Build settings
 markdown: kramdown
-permalink: /eungyu/:title/
+permalink: /:title.html
