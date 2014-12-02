@@ -2,6 +2,7 @@ title: Lately.cc
 url: "http://lately.cc"
 name: "lately.cc/eungyu"
 description: "lately.cc eungyu"
+baseurl: /eungyu
 
 # Build settings
 markdown: kramdown
