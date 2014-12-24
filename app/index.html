@@ -10,7 +10,7 @@ layout: default
   </div>
   <div class="content">
     {{ post.content }}
-    <div data-threadid="{{ post.id | replace_first: '/', '' }}"></div>
+    <div class="thread" data-threadid="{{ post.id | replace_first: '/', '' }}"></div>
 
     {% unless forloop.last %}
       <div class="divider"></div>
