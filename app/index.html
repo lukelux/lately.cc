@@ -14,5 +14,7 @@ layout: default
       <div class="divider"></div>
     {% endunless %}
   </div>
+  <div data-threadid="{{ post.id | replace_first: '/', '' }}"></div>
 {% endfor %}
 </div>
+
