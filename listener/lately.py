@@ -60,6 +60,7 @@ def main():
   jekyllpath   = config.get    ( 'server' ,  'jekyllpath'   )
   prefixurl    = config.get    ( 'server' ,  'prefixurl'    )
   dbname       = config.get    ( 'server' ,  'dbname'       )
+  debugmode    = config.get    ( 'server' ,  'debug'        )
   pollsec      = config.getint ( 'server' ,  'pollsec'      )
   qsize        = config.getint ( 'server' ,  'qsize'        )
   access_token = config.get    ( 'dropbox',  'access_token' )
@@ -82,9 +83,13 @@ def main():
   # create base directories
   initdirs(basedirs)
 
+  loglevel = logging.INFO
+  if debugmode == "on":
+    loglevel = logging.DEBUG
+
   logging.basicConfig(
     filename=logpath,
-    level=logging.INFO,
+    level=loglevel,
     format='%(asctime)s %(levelname)s %(name)s: %(message)s'
   )
 
@@ -119,6 +124,9 @@ def main():
 
     except Queue.Empty:
       log.debug('Queue is empty, retrying')
+
+    except Exception, e:
+      log.exception(e)
 
   log.info("Shutting down")
   dayone_listener.shutdown()

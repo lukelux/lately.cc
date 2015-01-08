@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import pprint
 import logging
 import dropbox
 import plistlib
@@ -22,6 +23,7 @@ class JournalWriter:
     self.dirty = False
 
   def process(self, desc):
+    self.log.debug(desc)
     if desc['type'] == 'remove':
       return self.remove(desc)
 

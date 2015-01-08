@@ -60,6 +60,8 @@ class DayOneStore:
       self.log.debug("Calling longpoll with %d sec timeout" % timeoutsec)
       longpoll_result = self.dropbox_client.longpoll_delta(self.cursor, timeout=timeoutsec)
 
+      self.log.debug(longpoll_result)
+
       # something must have angered dropbox
       # backoff until desired interval
       if 'backoff' in longpoll_result:
