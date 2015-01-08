@@ -34,9 +34,14 @@ class DayOneStore:
 
   def run(self):
     while not self.shutdown_event.is_set():
-      entry = self.poll(30)
-      if not entry is None:
-        self.jobqueue.put(entry)
+      try:
+        entry = self.poll(30)
+        if not entry is None:
+          self.jobqueue.put(entry)
+      except Exception, e:
+        log.error("Error during long poll, retrying after 5 seconds")
+        log.exception(e)
+        time.sleep(5)
 
   def check_and_connect(self):
     if self.dropbox_client is None:
