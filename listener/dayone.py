@@ -39,8 +39,8 @@ class DayOneStore:
         if not entry is None:
           self.jobqueue.put(entry)
       except Exception, e:
-        log.error("Error during long poll, retrying after 5 seconds")
-        log.exception(e)
+        self.log.error("Error during long poll, retrying after 5 seconds")
+        self.log.exception(e)
         time.sleep(5)
 
   def check_and_connect(self):
