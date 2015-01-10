@@ -15,6 +15,8 @@ import dayone
 import journal
 import meta
 
+from logging.handlers import TimedRotatingFileHandler
+
 inshutdown = False
 
 def initdirs(dirlist):
@@ -66,7 +68,7 @@ def main():
   access_token = config.get    ( 'dropbox',  'access_token' )
 
   dbpath        = "%s/data/%s" % (basepath, dbname)
-  logpath       = "%s/log/lately.cc" % basepath
+  logpath       = "%s/log/change.log" % basepath
   sitelink      = "%s%s"  % (sitepath, prefixurl)
   releasedir    = "%s/releases" % sitepath
 
@@ -87,13 +89,19 @@ def main():
   if debugmode == "on":
     loglevel = logging.DEBUG
 
-  logging.basicConfig(
-    filename=logpath,
-    level=loglevel,
-    format='%(asctime)s %(levelname)s %(name)s: %(message)s'
-  )
+  formatter = logging.Formatter("%(asctime)s %(name)s [%(levelname)s] - %(message)s")
 
-  log = logging.getLogger("main")
+  handler = TimedRotatingFileHandler(logpath, when='midnight', backupCount=7)
+  handler.setFormatter(formatter)
+
+  # root logger
+  log = logging.getLogger()
+
+  log.setLevel(loglevel)
+  log.addHandler(handler)
+
+  # logging ends at this level
+  log.propagate = False
 
   log.info("------------------")
   log.info("Lately starting up")

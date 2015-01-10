@@ -11,7 +11,7 @@ class JournalWriter:
   """
     Converts Dropbox entry into journal entry file
   """
-  log = logging.getLogger(__name__)
+  log = logging.getLogger('lately.journal')
   yamldivide = "---"
 
   def __init__(self, basepath, prefixurl, metadb):

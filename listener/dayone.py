@@ -16,7 +16,7 @@ class DayOneStore:
   def __init__(self, access_token, cursor, jobqueue):
     self.cursor = cursor
     self.access_token = access_token
-    self.log = logging.getLogger(self.__class__.__name__)
+    self.log = logging.getLogger('lately.dayone')
     self.dropbox_client = None
     self.jobqueue = jobqueue
     self.shutdown_event = None
