@@ -7,3 +7,7 @@ baseurl: /eungyu
 # Build settings
 markdown: kramdown
 permalink: /:title.html
+
+gems:
+  - octopress-minify-html
+
