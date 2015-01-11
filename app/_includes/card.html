@@ -1,7 +1,7 @@
-{% capture imgfound %}{% file_exists img/p{{ page.url | replace: '.html', '.jpg' }} %}{% endcapture %}  <!-- twitter card -->{% if imgfound == "true" %}
+{% capture imgfound %}{% file_exists img/p{{ page.url | remove: '.html' }}.jpg %}{% endcapture %}  <!-- twitter card -->{% if imgfound == "true" %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:creator" content="@eungyu" />
-  <meta name="twitter:image:src" content="http://lately.cc/eungyu/img/p{{ page.url | replace: '.html', '.jpg' }}" />
+  <meta name="twitter:image:src" content="http://lately.cc/eungyu/img/p{{ page.url | remove: '.html' }}.jpg" />
 {% else %}
   j<meta name="twitter:card" content="summary" />
 {% endif %}
