@@ -1,7 +1,13 @@
-<!-- twitter card -->
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="@eungyu" />
-<meta name="twitter:title" content="{{ page.title }}" />
-<meta name="twitter:description" content="{{ page.excerpt | strip_html | strip_newlines | truncatewords: 30 }}" />
-<meta name="twitter:url" content="http://lately.cc/eungyu{{ page.url | remove: '.html' }}" />
+{% capture imgfound %}{% file_exists img/p{{ page.url | replace: '.html', '.jpg' }} %}{% endcapture %}  <!-- twitter card -->{% if imgfound == "true" %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@eungyu" />
+  <meta name="twitter:image:src" content="http://lately.cc/eungyu/img/p{{ page.url | replace: '.html', '.jpg' }}" />
+{% else %}
+  j<meta name="twitter:card" content="summary" />
+{% endif %}
+  <meta name="twitter:site" content="@eungyu" />
+  <meta name="twitter:title" content="{{ page.title }}" />
+  <meta name="twitter:description" content="{{ page.excerpt | strip_html | strip_newlines | truncatewords: 30 }}" />
+  <meta name="twitter:url" content="http://lately.cc/eungyu{{ page.url | remove: '.html' }}" />
+
 
