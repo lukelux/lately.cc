@@ -140,7 +140,7 @@ class JournalWriter:
       trim_blocks=False)
 
     t = TEMPLATE_ENVIRONMENT.get_template('img-check-syntax.template')
-    return t.render(basepath=self.basepath, prefixurl=self.prefixurl, revision=revision)
+    return t.render(prefixurl=self.prefixurl, revision=revision)
 
   def unpublish(self, fullpath):
     if os.path.exists(fullpath) and os.path.isfile(fullpath):

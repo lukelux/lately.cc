@@ -12,7 +12,7 @@ module Jekyll
             url = Liquid::Template.parse(@path).render context
 
             # check if file exists (returns true or false)
-            "#{File.exist?(url.strip!)}"
+            "#{File.exist?(File.dirname(__FILE__) + "/../" + url.strip!)}"
         end
     end
 end
