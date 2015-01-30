@@ -5,7 +5,7 @@ layout: default
 <div class="post">
 {% for post in site.posts limit:8 %}
   <div class="meta">
-    <h2>{{ post.title }}</h2>
+    <a href="{{ site.baseurl }}{{ post.url | replace_first: '.html', '' }}" class="subject"><h2>{{ post.title }}</h2></a>
     {{ post.date | date: "%A, %B %-d, %Y" }}
   </div>
   <div class="content">
