@@ -10,19 +10,12 @@ Use of ```longpoll_delta()``` and ```delta()``` Dropbox API enables Lately.cc to
 
 Installation
 ------------
-Download and install [Dropbox Python SDK](https://www.dropbox.com/developers/core/sdks/python)
-```bash
-# download, unzip, and install
-curl -LO https://www.dropbox.com/developers/downloads/sdks/core/python/dropbox-python-sdk-2.2.0.zip
-unzip dropbox-python-sdk-2.2.0.zip
-cd dropbox-python-sdk-2.2.0 && sudo python setup.py install
-```
-
-Lately.cc works with [Jekyll](http://jekyllrb.com/) and [Jinja2](http://jinja.pocoo.org/docs/dev/)
+Lately.cc works with Dropbox, [Jekyll](http://jekyllrb.com/) and [Jinja2](http://jinja.pocoo.org/docs/dev/)
 ```bash
 # prerequisites
 gem install jekyll
 pip install jinja2
+pip install dropbox
 ```
 
 Finally clone Lately source
