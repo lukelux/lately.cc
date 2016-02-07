@@ -4,7 +4,7 @@ layout: single
 <div class="post">
 
 <div class="meta">
-  <h2>{{ page.title }}</h2>
+  <h2 class="{{ page.title | all_alphabet }}">{{ page.title }}</h2>
   {{ page.date | date: "%A, %B %-d, %Y" }}
 </div>
 
